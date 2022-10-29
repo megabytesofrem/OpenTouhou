@@ -1,4 +1,4 @@
-#include "PBG3.hpp"
+#include "parser/PBG3.hpp"
 
 using namespace OpenTouhou;
 

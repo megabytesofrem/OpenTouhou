@@ -19,17 +19,23 @@ void PBG3::load(const std::string &path) {
 
     std::cout << "[PBG3::load] magic: " << magic << std::endl;
     std::printf("[PBG3::load] entries: %zu\n", entries);
-    std::printf("[PBG3::load] ft_offset: 0x%x\n", ft_offset);
+    std::printf("[PBG3::load] ft_offset: %x\n", ft_offset);
 
-    // strncpy(header.magic, magic, 4);
+    // std::strncpy(header.magic, magic, 4);
 
     // header.entries = entries;
     // header.ft_offset = ft_offset;
 
     // Read file table
-    // for (int n = 0; n < entries; n++) {
-    // read_ft_entry();
-    // }
+
+    // Bruteforce the ft_offset to see if anything is valid
+    reader->file.seekg(ft_offset);
+    for (int n = 0; n < entries; n++) {
+        read_ft_entry();
+    }
+    // reader->file.seekg(0, std::ios::end);
+    // std::cout << "[PBG3::load] seeking to end of file" << std::endl;
+    // std::cout << "[PBG3::load] fp is at: " << std::hex << reader->file.tellg() << std::endl;
 }
 
 void PBG3::read_ft_entry() {

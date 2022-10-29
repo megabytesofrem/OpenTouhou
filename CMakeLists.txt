@@ -8,8 +8,8 @@ include_directories(${SDL2_INCLUDE_DIRS})
 
 add_executable(OpenTouhou
    src/main.cpp
-   src/PBG3.cpp
-   src/BinaryReader.cpp
+   src/parser/PBG3.cpp
+   src/parser/BinaryReader.cpp
 )
 
 target_compile_features(OpenTouhou PRIVATE cxx_std_17)

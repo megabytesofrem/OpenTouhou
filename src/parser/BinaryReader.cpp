@@ -18,25 +18,35 @@ char *BinaryReader::read_cstring(size_t len) {
 }
 
 std::string BinaryReader::read_string() {
-    file.unsetf(std::ios::skipws);
+    std::string s = "";
+    char c;
 
-    std::istream_iterator<char> start(file), end(file);
-    std::size_t len = 0;
-
-    while (*end != '\0') {
-        ++end;
-        ++len;
+    file.read(&c, sizeof(char));
+    while (c != '\0') {
+        s += c;
+        file.read(&c, sizeof(char));
     }
 
-    std::cout << len << std::endl;
+    std::cout << "read string: " << s << std::endl;
+    return s;
 
-    std::string buf;
-    buf.reserve(len);
-    buf.insert(buf.begin(), start, end);
+    // file.unsetf(std::ios::skipws);
 
-    std::cout << buf << std::endl;
+    // std::istream_iterator<char> start(file), end(file);
+    // std::size_t len = 0;
 
-    return buf;
+    // while (*end != '\0') {
+    //     ++end;
+    //     ++len;
+    // }
+
+    // std::cout << len << std::endl;
+
+    // std::string buf;
+    // buf.reserve(len);
+    // buf.insert(buf.begin(), start, end);
+
+    // std::cout << buf << std::endl;
 }
 
 const char *to_bin(unsigned a) {
@@ -66,32 +76,33 @@ unsigned int BinaryReader::read_int() {
         for (unsigned int mask = 1 << 7; mask != 0; mask >>= 1) {
             unsigned int bit = (byte & mask) > 1;
 
-            std::cout << "bit: " << (int)bit << std::endl;
+            // std::cout << "bit: " << (int)bit << std::endl;
 
             buffer.push_back(bit);
 
             if (read_byte_size == 0 and buffer.size() == 2) {
                 read_byte_size = (buffer[0] << 1) + buffer[1] + 1;
                 buffer.clear();
-                std::cout << "read_byte_size: " << read_byte_size << std::endl;
+                // std::cout << "read_byte_size: " << read_byte_size << std::endl;
             } else if (read_byte_size > 0) {
                 read_bits++;
                 if (read_bits % 4 == 0) {
-                    int num = (buffer[0] << 3) + (buffer[1] << 2) +
-                              (buffer[2] << 1) + buffer[3];
+                    // Read a nibble
+                    int num = (buffer[0] << 3) + (buffer[1] << 2) + (buffer[2] << 1) + buffer[3];
                     final_buf.push_back(num);
                     buffer.clear();
                 }
                 if (read_bits == read_byte_size * 8) {
-
-                    std::cout << "pass" << std::endl;
-                    for (char i : buffer)
-                        std::cout << "-> " << i << std::endl;
+                    // for (char i : buffer)
+                    //     std::cout << "-> " << i << std::endl;
 
                     int num, final = 0;
+
+                    // Calculate the final number
                     for (int j = 0; j < final_buf.size(); j++) {
-                        num = final_buf[j];
-                        final += num * pow(10, (final_buf.size() - j) - 1);
+                        // num = final_buf[j];
+                        // final += num * pow(10, (final_buf.size() - j) - 1);
+                        std::cout << "entry: " << final_buf[j] << std::endl;
                     }
                     return final;
                 }
@@ -99,7 +110,6 @@ unsigned int BinaryReader::read_int() {
         }
 
     } while (file.peek() != EOF);
-    std::cout << "byte was null!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
     return NULL;
 }
 

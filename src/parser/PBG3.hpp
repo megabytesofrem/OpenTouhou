@@ -8,7 +8,7 @@
 #include <iostream>
 #include <string>
 
-#include <string.h>
+#include <cstring>
 
 namespace OpenTouhou {
 struct PBG_Header {
